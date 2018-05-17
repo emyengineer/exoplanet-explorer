@@ -35,6 +35,31 @@ Instructions:
 
     Your code goes here!
      */
+     // url (required), options (optional)
+     var headers;
+   return  fetch(url, {
+          method: 'GET', 
+          mode: 'cors', 
+          redirect: 'follow',
+          headers: new Headers({
+            'Content-Type': 'text/plain'
+          })
+      }).then(function(response) { 
+        console.log('Getting response ', response);
+
+       }).catch(function(err) {
+        console.log('Errorr in get(url)');
+       });
+
+    // fetch(url, {
+    //   method: 'get'
+    // }).then(function(response) {
+    //   console.log('Getting response ', response);
+    // }).catch(function(err) {
+    //   // Error :(
+    //   console.log('Errorr in get(url)');
+    // });
+
   }
 
   /**
@@ -48,6 +73,16 @@ Instructions:
 
     Your code goes here!
      */
+    return new Promise(function(resolve, reject) {
+          get(url);
+          // .then(function(response) {
+          //   resolve(response);
+          // })
+          // .catch(function(err) {
+          //   console.log('Error in Getting JSON of url', err);
+
+          // });
+    });
   }
 
   window.addEventListener('WebComponentsReady', function() {
@@ -58,6 +93,12 @@ Instructions:
 
     Your code goes here too!
      */
-    // getJSON('../data/earth-like-results.json')
+     getJSON('../data/earth-like-results.json')
+     .then(function(response) {
+      console.log('getJSON '+response.query);
+      addSearchHeader(response.query);
+     }).catch(function(err) {
+        console.log('err in calling getJSON'+ err);
+     });
   });
 })(document);
