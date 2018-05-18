@@ -62,11 +62,38 @@ Instructions:
     /*
     Refactor this code!
      */
+     /*My fix
     getJSON('../data/earth-like-results.json')
     .then(function(response) {
+      // response.results.forEach(function(url) {
+      //   getJSON(url).then(createPlanetThumb);
+      // });
+      var promise = null ;
+      for(var i=0; i< response.results.length ; i++) {
+          promise = new Promise(function(resolve) {
+            var url = response.results[i];
+            console.log(url);
+            return getJSON(url).then(createPlanetThumb);
+          })
+          .catch(function(err) {
+            console.log('error occured' , err);
+          });
+        
+      }
+    });*/
+    /*Lecturer fix*/
+    getJSON('../data/earth-like-results.json')
+    .then(function(response) {
+      var sequence = Promise.resolve();
       response.results.forEach(function(url) {
-        getJSON(url).then(createPlanetThumb);
+        sequence = sequence.then(function() {
+          return getJSON(url);
+        })
+        .then(createPlanetThumb);
       });
+    })
+    .catch(function(e) {
+      console.log(e);
     });
   });
 })(document);
