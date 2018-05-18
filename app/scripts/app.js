@@ -29,8 +29,10 @@ Instructions:
    */
   function createPlanetThumb(data) {
     var pT = document.createElement('planet-thumb');
+    console.log(data);
     for (var d in data) {
       pT[d] = data[d];
+      console.log(pT[d]);
     }
     home.appendChild(pT);
   }
@@ -64,6 +66,25 @@ Instructions:
 
     Your code goes here!
      */
-    // getJSON('../data/earth-like-results.json')
+     getJSON('../data/earth-like-results.json').then(function(response){
+        addSearchHeader(response.query);
+        // response.results.forEach(function(url) {
+        //   getJSON(url).then(createPlanetThumb);
+        // });
+        return response.results[0];
+      })
+     .catch(function() {
+      throw Error('Search Request Error');
+     })
+     .then(function(url) {
+          getJSON(url).then(function(data) {
+            createPlanetThumb(data);
+          })
+      })
+      .catch(function(e) {
+        addSearchHeader('unknown');
+        console.log(e);
+      });
+          
   });
 })(document);
