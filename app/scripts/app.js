@@ -58,6 +58,29 @@ proper order even if all the requests haven't finished.
     /*
     Your code goes here!
      */
-    // getJSON('../data/earth-like-results.json')
+     getJSON('../data/earth-like-results.json')
+     .then(function(response) {
+
+      var arrayOfPromises = response.results.map(function(url) {
+        return getJSON(url);
+      });
+
+      Promise.all(arrayOfPromises).then(function(arrayOfValues) {
+        var sequence = Promise.resolve();
+        arrayOfValues.forEach(function(value) {
+          sequence = sequence.then(function() {
+            createPlanetThumb(value);
+          })
+            .catch(function(e) {
+              console.log(e);
+            });
+          
+        });
+      });
+
+     })
+     .catch(function(err) {
+        console.log('Big Error' + err);
+     });
   });
 })(document);
